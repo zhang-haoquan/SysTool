@@ -1,56 +1,56 @@
-# MCP Server
+# MCP 服务器
 
-Management Control Protocol Server implementation with Node.js.
+基于 Node.js 实现的管理控制协议服务器。
 
-## Features
+## 功能特性
 
-- System time retrieval service
-- Modular architecture for extensibility
-- RESTful API design
-- Comprehensive logging
-- Unit testing coverage
-- Plugin system (future extension)
-- Configurable settings
+- 系统时间获取服务
+- 模块化架构，易于扩展
+- RESTful API 设计
+- 全面的日志记录
+- 单元测试覆盖率
+- 插件系统（未来扩展）
+- 可配置设置
 
-## Installation
+## 安装
 
 ```bash
 npm install
 ```
 
-## Usage
+## 使用方法
 
 ```bash
-# Start the server
+# 启动服务器
 npm start
 
-# Development mode with auto-reload
+# 开发模式（自动重载）
 npm run dev
 
-# Run tests
+# 运行测试
 npm test
 
-# Run tests with coverage
+# 运行测试并生成覆盖率报告
 npm run test:coverage
 ```
 
-## API Endpoints
+## API 端点
 
-### Get Current Time
+### 获取当前时间
 
 ```
 GET /api/time
 ```
 
-Parameters:
-- `format`: Response format (`timestamp`, `formatted`, or `both`)
-  - `timestamp`: Returns Unix timestamp (default)
-  - `formatted`: Returns formatted string (YYYY-MM-DD HH:MM:SS)
-  - `both`: Returns both timestamp and formatted time
+参数：
+- `format`: 响应格式（`timestamp`、`formatted` 或 `both`）
+  - `timestamp`: 返回 Unix 时间戳（默认）
+  - `formatted`: 返回格式化字符串（YYYY-MM-DD HH:MM:SS）
+  - `both`: 返回时间戳和格式化时间
 
-Example responses:
+响应示例：
 
-Timestamp format:
+时间戳格式：
 ```json
 {
   "success": true,
@@ -60,7 +60,7 @@ Timestamp format:
 }
 ```
 
-Formatted format:
+格式化格式：
 ```json
 {
   "success": true,
@@ -70,7 +70,7 @@ Formatted format:
 }
 ```
 
-Both format:
+两种格式：
 ```json
 {
   "success": true,
@@ -81,13 +81,13 @@ Both format:
 }
 ```
 
-### Health Check
+### 健康检查
 
 ```
 GET /api/health
 ```
 
-Response:
+响应：
 ```json
 {
   "status": "OK",
@@ -96,110 +96,110 @@ Response:
 }
 ```
 
-## Configuration
+## 配置
 
-The server can be configured using environment variables:
+服务器可以使用环境变量进行配置：
 
-- `PORT`: Server port (default: 3000)
-- `HOST`: Server host (default: localhost)
-- `LOG_LEVEL`: Logging level (default: info)
-- `LOG_FILE`: Log file path (default: logs/mcp-server.log)
-- `PLUGINS_ENABLED`: Enable plugin system (default: false)
-- `PLUGINS_DIRECTORY`: Plugins directory path (default: ./plugins)
-- `REQUEST_LOGGING`: Enable request logging (default: true)
+- `PORT`: 服务器端口（默认：3000）
+- `HOST`: 服务器主机（默认：localhost）
+- `LOG_LEVEL`: 日志级别（默认：info）
+- `LOG_FILE`: 日志文件路径（默认：logs/mcp-server.log）
+- `PLUGINS_ENABLED`: 启用插件系统（默认：false）
+- `PLUGINS_DIRECTORY`: 插件目录路径（默认：./plugins）
+- `REQUEST_LOGGING`: 启用请求日志记录（默认：true）
 
-## Architecture
+## 架构
 
-The server follows a layered architecture:
+服务器采用分层架构：
 
 ```
 ┌─────────────────┐
-│   Controller    │ ← Handles HTTP requests/responses
+│   Controller    │ ← 处理 HTTP 请求/响应
 ├─────────────────┤
-│    Service      │ ← Implements business logic
+│    Service      │ ← 实现业务逻辑
 ├─────────────────┤
-│    Utility      │ ← Provides common helper functions
+│    Utility      │ ← 提供通用辅助函数
 └─────────────────┘
 ```
 
-- **Controller Layer**: Handles HTTP requests and responses
-- **Service Layer**: Implements business logic
-- **Utility Layer**: Provides common helper functions
-- **Middleware Layer**: Handles cross-cutting concerns (logging, error handling)
-- **Configuration Layer**: Manages application settings
+- **控制器层**: 处理 HTTP 请求和响应
+- **服务层**: 实现业务逻辑
+- **工具层**: 提供通用辅助函数
+- **中间件层**: 处理横切关注点（日志记录、错误处理）
+- **配置层**: 管理应用程序设置
 
-## Testing
+## 测试
 
-Run unit tests with:
+运行单元测试：
 
 ```bash
 npm test
 ```
 
-Run tests with coverage reporting:
+运行测试并生成覆盖率报告：
 
 ```bash
 npm run test:coverage
 ```
 
-## Extending the Server
+## 扩展服务器
 
-### Adding New Endpoints
+### 添加新端点
 
-1. Create a new service in `src/services/`
-2. Create a new controller in `src/controllers/`
-3. Add routes in `src/routes/`
-4. Register routes in `src/routes/index.js`
+1. 在 `src/services/` 中创建新服务
+2. 在 `src/controllers/` 中创建新控制器
+3. 在 `src/routes/` 中添加路由
+4. 在 `src/routes/index.js` 中注册路由
 
-### Plugin System
+### 插件系统
 
-The server includes a plugin system for future extensions. To enable:
+服务器包含用于未来扩展的插件系统。启用方法：
 
-1. Set `PLUGINS_ENABLED=true` in environment variables
-2. Place plugin files in the plugins directory (default: `./plugins`)
-3. Plugins should export an object with at least a `name` property
+1. 在环境变量中设置 `PLUGINS_ENABLED=true`
+2. 将插件文件放置在插件目录中（默认：`./plugins`）
+3. 插件应导出至少包含 `name` 属性的对象
 
-Example plugin structure:
+插件结构示例：
 ```javascript
 // plugins/examplePlugin.js
 module.exports = {
   name: 'example-plugin',
   version: '1.0.0',
   init: function(server) {
-    // Plugin initialization code
-    console.log('Example plugin initialized');
+    // 插件初始化代码
+    console.log('示例插件已初始化');
   }
 };
 ```
 
-## Error Handling
+## 错误处理
 
-The server implements a unified error handling system:
+服务器实现了统一的错误处理系统：
 
-- Custom `MCPError` class for application-specific errors
-- Global error handler middleware
-- Consistent error response format:
+- 自定义 `MCPError` 类用于应用程序特定错误
+- 全局错误处理中间件
+- 一致的错误响应格式：
 
 ```json
 {
   "success": false,
   "error": {
     "code": "ERROR_CODE",
-    "message": "Error description"
+    "message": "错误描述"
   }
 }
 ```
 
-## Logging
+## 日志记录
 
-The server uses Winston for logging with both file and console transports. Logs include:
+服务器使用 Winston 进行日志记录，支持文件和控制台传输。日志包括：
 
-- Request/response logging
-- Error logging
-- Application events
-- Debug information
+- 请求/响应日志
+- 错误日志
+- 应用程序事件
+- 调试信息
 
-Log format:
+日志格式：
 ```
-{"level":"info","message":"Incoming request","timestamp":"2023-03-15T18:27:14.123Z","service":"mcp-server","method":"GET","url":"/api/time","ip":"::1"}
+{"level":"info","message":"传入请求","timestamp":"2023-03-15T18:27:14.123Z","service":"mcp-server","method":"GET","url":"/api/time","ip":"::1"}
 ```
