@@ -11,6 +11,9 @@
 - 单元测试覆盖率
 - 插件系统（未来扩展）
 - 可配置设置
+- 完整的MCP协议支持
+- 资源访问能力
+- 工具调用功能
 
 ## 安装
 
@@ -20,18 +23,80 @@ npm install
 
 ## 使用方法
 
-```bash
-# 启动服务器
-npm start
+1. 安装依赖：
+   ```bash
+   npm install
+   ```
 
-# 开发模式（自动重载）
-npm run dev
+2. 启动主服务器：
+   ```bash
+   npm start
+   ```
 
-# 运行测试
-npm test
+3. 启动MCP专用服务器：
+   ```bash
+   npm run start:mcp
+   ```
 
-# 运行测试并生成覆盖率报告
-npm run test:coverage
+4. 开发模式启动MCP服务器：
+   ```bash
+   npm run dev:mcp
+   ```
+
+5. 访问API端点：
+   - 时间获取：`GET /api/time`
+   - 健康检查：`GET /health`
+   
+6. 访问MCP端点：
+   - MCP协议端点：`POST /mcp` (在MCP服务器上)
+   - MCP健康检查：`GET /health` (在MCP服务器上)
+
+## MCP API 端点
+
+### MCP协议端点
+
+```
+POST /api/mcp
+```
+
+支持的MCP方法：
+1. `ping` - 基本连通性测试
+2. `list_resources` - 列出可用资源
+3. `read_resource` - 读取特定资源
+4. `list_tools` - 列出可用工具
+5. `call_tool` - 执行工具
+
+### MCP健康检查
+
+```
+GET /api/mcp/health
+```
+
+响应：
+```json
+{
+  "status": "healthy",
+  "service": "MCP Service",
+  "timestamp": "2023-03-15T18:27:14.123Z"
+}
+```
+
+### 获取MCP能力
+
+```
+GET /api/mcp/capabilities
+```
+
+响应：
+```json
+{
+  "capabilities": [
+    "text-generation",
+    "chat-completion",
+    "resource-access",
+    "tool-calling"
+  ]
+}
 ```
 
 ## API 端点
@@ -40,6 +105,70 @@ npm run test:coverage
 
 ```
 GET /api/time
+```
+
+## MCP 资源
+
+1. `resource://time-service` - 当前时间信息
+2. `resource://llm-service` - 语言模型功能
+
+## MCP 工具
+
+1. `get_current_time` - 返回当前时间和时区
+2. `generate_text` - 使用LLM生成文本（占位符实现）
+
+## MCP 示例请求
+
+### Ping 请求：
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "ping"
+}
+```
+
+### 列出资源：
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "method": "list_resources"
+}
+```
+
+### 读取资源：
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 3,
+  "method": "read_resource",
+  "params": {
+    "uri": "resource://time-service"
+  }
+}
+```
+
+### 列出工具：
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 4,
+  "method": "list_tools"
+}
+```
+
+### 调用工具：
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 5,
+  "method": "call_tool",
+  "params": {
+    "name": "get_current_time",
+    "arguments": {}
+  }
+}
 ```
 
 参数：
@@ -127,6 +256,21 @@ GET /api/health
 - **工具层**: 提供通用辅助函数
 - **中间件层**: 处理横切关注点（日志记录、错误处理）
 - **配置层**: 管理应用程序设置
+- **MCP层**: 实现MCP协议功能
+
+### MCP项目结构
+
+```
+src/
+├── mcp/                 # MCP-specific implementations
+│   ├── index.js         # Main MCP server class
+│   ├── handler.js       # MCP request handler
+│   └── server.js        # Standalone MCP server
+├── controllers/         # HTTP controllers
+├── services/            # Business logic services
+├── routes/              # API route definitions
+└── ...
+```
 
 ## 测试
 

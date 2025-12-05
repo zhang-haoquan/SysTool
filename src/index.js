@@ -1,6 +1,8 @@
 // Main entry point for MCP Server
 
 const express = require('express');
+const cors = require('cors');
+const path = require('path');
 const config = require('./config');
 const logger = require('./utils/logger');
 const requestLogger = require('./middleware/requestLogger');
@@ -19,6 +21,9 @@ const pluginManager = new PluginManager();
 
 // Middleware
 app.use(express.json());
+
+// Serve static files
+app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // Request logging middleware (if enabled)
 if (config.middleware.requestLogging) {

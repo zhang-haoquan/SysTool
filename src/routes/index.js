@@ -3,6 +3,7 @@
 const express = require('express');
 const timeRoutes = require('./timeRoutes');
 const llmRoutes = require('./llmRoutes');
+const mcpRoutes = require('./mcpRoutes');
 
 const router = express.Router();
 
@@ -18,5 +19,6 @@ router.get('/health', (req, res) => {
 // Register route modules
 router.use('/api', timeRoutes);
 router.use('/api/llm', llmRoutes);
+router.use('/api/mcp', mcpRoutes);
 
 module.exports = router;
